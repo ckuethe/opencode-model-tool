@@ -577,7 +577,8 @@ def format_models_json(models: dict, indent: int = 8) -> str:
 
     lines = ["{"]
     model_items = list(models.items())
-    for model_id, config in model_items:
+    for i, (model_id, config) in enumerate(model_items):
+        last = i == len(model_items) - 1
         mid_s = json.dumps(model_id)
         name_s = json.dumps(config["name"])
         lines.append(f"{' ' * indent}{mid_s}: {{")
@@ -586,7 +587,7 @@ def format_models_json(models: dict, indent: int = 8) -> str:
         lines.append(f'{" " * (indent + 4)}"context": {config["limit"]["context"]},')
         lines.append(f'{" " * (indent + 4)}"output": {config["limit"]["output"]}')
         lines.append(f"{' ' * (indent + 2)}}}")
-        lines.append(f"{' ' * indent}}},")
+        lines.append(f"{' ' * indent}}}," if not last else f"{' ' * indent}}}")
     lines.append(f"{' ' * (indent - 2)}}}")
     return "\n".join(lines)
 
